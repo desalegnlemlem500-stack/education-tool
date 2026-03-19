@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill-Swap Marketplace</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "DM Sans", sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 50%, #f5f0eb 100%); min-height: 100vh; color: #2d3748; }
+        .container { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem; }
+        header { text-align: center; margin-bottom: 1.75rem; }
+        header h1 { font-family: "Fraunces", serif; font-size: 1.65rem; color: #1a365d; margin-bottom: 0.35rem; }
+        header p { font-size: 0.9rem; color: #5a6c7d; }
+        a.back-link { display: inline-flex; align-items: center; gap: 0.35rem; color: #2b6cb0; text-decoration: none; font-size: 0.9rem; margin-bottom: 1rem; }
+        a.back-link:hover { text-decoration: underline; }
+        .card { background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.05); }
+        .card h2 { font-size: 1rem; font-weight: 600; color: #2d3748; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+        .card h2 .material-symbols-outlined { font-size: 1.1rem; color: #2b6cb0; }
+        label { display: block; font-weight: 500; font-size: 0.85rem; color: #4a5568; margin-bottom: 0.35rem; }
+        input, textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 0.95rem; font-family: inherit; margin-bottom: 0.75rem; }
+        input:focus, textarea:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 2px rgba(49,130,206,0.2); }
+        textarea { resize: vertical; min-height: 60px; }
+        .hint { font-size: 0.8rem; color: #718096; margin-top: -0.4rem; margin-bottom: 0.75rem; }
+        button.primary { display: inline-flex; align-items: center; gap: 0.4rem; padding: 10px 18px; background: #2b6cb0; color: #fff; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+        button.primary:hover { background: #2c5282; }
+        .student-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .student-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem; background: #f7fafc; border-radius: 10px; border: 1px solid #e2e8f0; }
+        .student-item .info { flex: 1; }
+        .student-item .name { font-weight: 600; color: #1a365d; margin-bottom: 0.25rem; }
+        .student-item .super { font-size: 0.85rem; color: #276749; }
+        .student-item .growth { font-size: 0.85rem; color: #b7791f; margin-top: 0.2rem; }
+        .student-item button { flex-shrink: 0; padding: 8px 14px; background: #38a169; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; }
+        .student-item button:hover { background: #2f855a; }
+        .match-banner { background: linear-gradient(135deg, #276749 0%, #2f855a 100%); color: #fff; padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .match-banner .material-symbols-outlined { font-size: 1.5rem; }
+        .match-banner strong { font-size: 0.95rem; }
+        .match-banner span { font-size: 0.85rem; opacity: 0.95; }
+        .session-length { font-size: 0.8rem; color: #718096; margin-top: 0.25rem; }
+        .empty { text-align: center; padding: 2rem; color: #718096; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="index.html"><span class="material-symbols-outlined" style="font-size:1.1rem">arrow_back</span> All tools</a>
+        <header>
+            <h1>Skill-Swap Marketplace</h1>
+            <p>List your superpowers and growth areas. Get matched for 20-minute peer-tutoring sessions.</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="material-symbols-outlined">person_add</span> My profile</h2>
+            <label>Your name</label>
+            <input type="text" id="my-name" placeholder="e.g. Alex" />
+            <label>Superpowers (what you're good at)</label>
+            <input type="text" id="my-super" placeholder="e.g. Good at Algebra, Clear explanations" />
+            <p class="hint">Skills you can help others with.</p>
+            <label>Growth areas (where you want help)</label>
+            <input type="text" id="my-growth" placeholder="e.g. Need help with Amharic grammar, Essay structure" />
+            <p class="hint">Topics you'd like a peer to help you with.</p>
+            <button type="button" class="primary" id="save-profile">
+                <span class="material-symbols-outlined" style="font-size:1.1rem">save</span> Save & find matches
+            </button>
+        </div>
+
+        <div class="card">
+            <h2><span class="material-symbols-outlined">handshake</span> Your matches</h2>
+            <p class="hint" style="margin-bottom:0.75rem">Peers who can help you (they have your growth area as a superpower) and peers you can help.</p>
+            <div id="match-list" class="student-list"></div>
+            <div id="match-empty" class="empty" style="display:none;">Save your profile above to see matches. Add sample students below to try it.</div>
+        </div>
+
+        <div class="card">
+            <h2><span class="material-symbols-outlined">groups</span> Class roster (demo)</h2>
+            <p class="hint" style="margin-bottom:0.75rem">Add students to simulate a class. Matches are based on superpowers and growth areas.</p>
+            <label>Name</label>
+            <input type="text" id="add-name" placeholder="Student name" />
+            <label>Superpowers</label>
+            <input type="text" id="add-super" placeholder="e.g. Good at Algebra" />
+            <label>Growth areas</label>
+            <input type="text" id="add-growth" placeholder="e.g. Need help with Amharic grammar" />
+            <button type="button" class="primary" id="add-student">
+                <span class="material-symbols-outlined" style="font-size:1.1rem">add</span> Add student
+            </button>
+            <div id="roster-list" class="student-list" style="margin-top:1rem;"></div>
+        </div>
+    </div>
+    <script>
+        const STORAGE_KEY = "skillSwap";
+        const ROSTER_KEY = "skillSwapRoster";
+
+        function getData() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch (e) { return {}; }
+        }
+        function getRoster() {
+            try { return JSON.parse(localStorage.getItem(ROSTER_KEY) || "[]"); } catch (e) { return []; }
+        }
+        function saveRoster(arr) { localStorage.setItem(ROSTER_KEY, JSON.stringify(arr)); }
+
+        const defaultRoster = [
+            { name: "Sam", super: "Good at Algebra, Geometry", growth: "Struggles with essay writing" },
+            { name: "Jordan", super: "Amharic grammar, Reading", growth: "Needs help with Algebra" },
+            { name: "Casey", super: "Essay structure, History", growth: "Needs help with science experiments" }
+        ];
+
+        let roster = getRoster();
+        if (roster.length === 0) {
+            roster = defaultRoster.slice();
+            saveRoster(roster);
+        }
+
+        function saveProfile() {
+            const name = document.getElementById("my-name").value.trim();
+            const superpowers = document.getElementById("my-super").value.trim();
+            const growth = document.getElementById("my-growth").value.trim();
+            if (!name) return;
+            const data = { name, superpowers, growth };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            renderMatches();
+        }
+
+        function renderMatches() {
+            const data = getData();
+            const list = document.getElementById("match-list");
+            const empty = document.getElementById("match-empty");
+            list.innerHTML = "";
+            if (!data.name || (!data.superpowers && !data.growth)) {
+                empty.style.display = "block";
+                return;
+            }
+            empty.style.display = "none";
+
+            const mySuper = (data.superpowers || "").toLowerCase().split(/[,;]/).map(s => s.trim()).filter(Boolean);
+            const myGrowth = (data.growth || "").toLowerCase().split(/[,;]/).map(s => s.trim()).filter(Boolean);
+
+            roster.forEach((s, i) => {
+                if (s.name === data.name) return;
+                const sSuper = (s.super || "").toLowerCase();
+                const sGrowth = (s.growth || "").toLowerCase();
+                const canTheyHelpMe = myGrowth.some(g => sSuper.includes(g));
+                const canIHelpThem = mySuper.some(sup => sGrowth.includes(sup));
+                if (!canTheyHelpMe && !canIHelpThem) return;
+
+                const div = document.createElement("div");
+                div.className = "student-item";
+                let reason = [];
+                if (canTheyHelpMe) reason.push("They can help you");
+                if (canIHelpThem) reason.push("You can help them");
+                div.innerHTML = `
+                    <div class="info">
+                        <div class="name">${escapeHtml(s.name)}</div>
+                        <div class="super">Superpowers: ${escapeHtml(s.super || "—")}</div>
+                        <div class="growth">Growth: ${escapeHtml(s.growth || "—")}</div>
+                        <div class="session-length">20-min peer session • ${reason.join(" • ")}</div>
+                    </div>
+                    <button type="button" data-i="${i}">Schedule 20 min</button>
+                `;
+                div.querySelector("button").addEventListener("click", () => {
+                    alert(`Session scheduled with ${s.name} for 20 minutes. (Demo — add a calendar integration in a full app.)`);
+                });
+                list.appendChild(div);
+            });
+
+            if (list.children.length === 0) {
+                empty.style.display = "block";
+                empty.textContent = "No matches yet. Add students to the roster with matching superpowers/growth areas.";
+            }
+        }
+
+        function renderRoster() {
+            const list = document.getElementById("roster-list");
+            list.innerHTML = roster.map((s, i) => `
+                <div class="student-item">
+                    <div class="info">
+                        <div class="name">${escapeHtml(s.name)}</div>
+                        <div class="super">Superpowers: ${escapeHtml(s.super || "—")}</div>
+                        <div class="growth">Growth: ${escapeHtml(s.growth || "—")}</div>
+                    </div>
+                    <button type="button" data-i="${i}">Remove</button>
+                </div>
+            `).join("");
+            list.querySelectorAll("button").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    roster.splice(parseInt(btn.dataset.i, 10), 1);
+                    saveRoster(roster);
+                    renderRoster();
+                    renderMatches();
+                });
+            });
+        }
+
+        function addStudent() {
+            const name = document.getElementById("add-name").value.trim();
+            const superpowers = document.getElementById("add-super").value.trim();
+            const growth = document.getElementById("add-growth").value.trim();
+            if (!name) return;
+            roster.push({ name, super: superpowers, growth });
+            saveRoster(roster);
+            document.getElementById("add-name").value = "";
+            document.getElementById("add-super").value = "";
+            document.getElementById("add-growth").value = "";
+            renderRoster();
+            renderMatches();
+        }
+
+        function escapeHtml(s) {
+            const div = document.createElement("div");
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        const data = getData();
+        document.getElementById("my-name").value = data.name || "";
+        document.getElementById("my-super").value = data.superpowers || "";
+        document.getElementById("my-growth").value = data.growth || "";
+
+        document.getElementById("save-profile").addEventListener("click", saveProfile);
+        document.getElementById("add-student").addEventListener("click", addStudent);
+
+        renderRoster();
+        renderMatches();
+    </script>
+</body>
+</html>

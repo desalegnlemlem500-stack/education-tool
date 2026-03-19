@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Curator for Teachers</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "DM Sans", sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 50%, #f5f0eb 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-family: "Fraunces", serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 0.35rem;
+        }
+        header p {
+            font-size: 0.95rem;
+            color: #5a6c7d;
+        }
+        .input-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+        .input-card label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        .input-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: stretch;
+        }
+        .input-row input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-row input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        }
+        .input-row input::placeholder {
+            color: #a0aec0;
+        }
+        #generate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 12px 20px;
+            background: #2b6cb0;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s, transform 0.1s;
+        }
+        #generate-btn:hover {
+            background: #2c5282;
+        }
+        #generate-btn:active {
+            transform: scale(0.98);
+        }
+        #generate-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #5a6c7d;
+        }
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #2b6cb0;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-msg {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            color: #c53030;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        #output {
+            display: none;
+        }
+        #output.visible {
+            display: block;
+        }
+        .pack-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .pack-header h2 {
+            font-family: "Fraunces", serif;
+            font-size: 1.35rem;
+            color: #1a365d;
+        }
+        .pack-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .pack-actions button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 8px 14px;
+            background: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4a5568;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .pack-actions button:hover {
+            background: #f7fafc;
+            border-color: #2b6cb0;
+            color: #2b6cb0;
+        }
+        .section {
+            background: #fff;
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2b6cb0;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section h3 .material-symbols-outlined {
+            font-size: 1.2rem;
+        }
+        .section-content {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #2d3748;
+        }
+        .section-content p {
+            margin-bottom: 0.6rem;
+        }
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        .section-content pre,
+        .section-content .raw-block {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        .level-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.25rem;
+        }
+        .level-1 .level-badge { background: #c6f6d5; color: #276749; }
+        .level-2 .level-badge { background: #bee3f8; color: #2b6cb0; }
+        .level-3 .level-badge { background: #e9d8fd; color: #553c9a; }
+        .parent-guide .section-content {
+            background: #f0fff4;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #48bb78;
+        }
+        @media print {
+            body { background: #fff; }
+            .input-card, .pack-actions, .loading, .error-msg, button { display: none !important; }
+            .section { break-inside: avoid; box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="index.html" style="display:inline-flex;align-items:center;gap:0.35rem;color:#2b6cb0;text-decoration:none;font-size:0.9rem;margin-bottom:1rem;"><span class="material-symbols-outlined" style="font-size:1.1rem">arrow_back</span> All tools</a>
+        <header>
+            <h1>Resource Curator for Teachers</h1>
+            <p>Generate a Resource Pack: 2-minute summary, practice questions at 3 levels, and a parent guide.</p>
+        </header>
+
+        <div class="input-card">
+            <label for="topic">Lesson topic</label>
+            <div class="input-row">
+                <input type="text" id="topic" placeholder="e.g. Grade 7 Photosynthesis, Year 5 Fractions" spellcheck="true" />
+                <button type="button" id="generate-btn">
+                    <span class="material-symbols-outlined" style="font-size:1.2rem">auto_awesome</span>
+                    Generate Resource Pack
+                </button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Creating your Resource Pack…</p>
+        </div>
+
+        <div class="error-msg" id="error-msg" style="display: none;"></div>
+
+        <div id="output">
+            <div class="pack-header">
+                <h2>Your Resource Pack</h2>
+                <div class="pack-actions">
+                    <button type="button" id="print-btn">
+                        <span class="material-symbols-outlined" style="font-size:1.1rem">print</span>
+                        Print
+                    </button>
+                    <button type="button" id="copy-btn">
+                        <span class="material-symbols-outlined" style="font-size:1.1rem">content_copy</span>
+                        Copy text
+                    </button>
+                </div>
+            </div>
+            <div id="pack-sections"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "AIzaSyBANG1ohFHscjiZof2I-khhP652PhbW4Ps";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+
+        const topicInput = document.getElementById("topic");
+        const generateBtn = document.getElementById("generate-btn");
+        const loadingEl = document.getElementById("loading");
+        const errorEl = document.getElementById("error-msg");
+        const outputEl = document.getElementById("output");
+        const packSections = document.getElementById("pack-sections");
+        const printBtn = document.getElementById("print-btn");
+        const copyBtn = document.getElementById("copy-btn");
+
+        const SECTION_HEADERS = [
+            "## 2-Minute Summary",
+            "## Level 1: Foundational Questions",
+            "## Level 2: Standard Questions",
+            "## Level 3: Challenge Questions",
+            "## Parent Guide"
+        ];
+
+        const PROMPT = `You are an expert educational resource curator for teachers. For the lesson topic below, create a complete Resource Pack. Use exactly these section headers (each on its own line) so the response can be parsed:
+
+## 2-Minute Summary
+Write a concise summary that takes about 2 minutes to read (3-4 short paragraphs). Use clear, student-friendly language.
+
+## Level 1: Foundational Questions
+Write 3 simple recall/understanding questions with brief answers. Format each as:
+Q1. [question]
+A1. [answer]
+Q2. [question]
+A2. [answer]
+Q3. [question]
+A3. [answer]
+
+## Level 2: Standard Questions
+Write 3 application/medium-difficulty questions with answers. Same Q1/A1, Q2/A2, Q3/A3 format.
+
+## Level 3: Challenge Questions
+Write 3 higher-order thinking questions with answers. Same Q1/A1, Q2/A2, Q3/A3 format.
+
+## Parent Guide
+Write a short, friendly guide for parents to help their child at home. Use simple language, 4-5 bullet points or short paragraphs. No jargon.
+
+Lesson topic: `;
+
+        function hideError() {
+            errorEl.style.display = "none";
+        }
+
+        function showError(msg) {
+            errorEl.textContent = msg;
+            errorEl.style.display = "block";
+        }
+
+        function setLoading(on) {
+            generateBtn.disabled = on;
+            loadingEl.style.display = on ? "block" : "none";
+            outputEl.classList.remove("visible");
+            hideError();
+        }
+
+        function parseSections(text) {
+            const sections = [];
+            let remaining = text.replace(/^[\s\n]+|[\s\n]+$/g, "");
+
+            for (let i = 0; i < SECTION_HEADERS.length; i++) {
+                const header = SECTION_HEADERS[i];
+                const nextHeader = SECTION_HEADERS[i + 1];
+                const startIdx = remaining.indexOf(header);
+                if (startIdx === -1) continue;
+                const contentStart = startIdx + header.length;
+                const endIdx = nextHeader ? remaining.indexOf(nextHeader, contentStart) : remaining.length;
+                const content = (endIdx === -1 ? remaining.slice(contentStart) : remaining.slice(contentStart, endIdx))
+                    .replace(/^[\s\n]+|[\s\n]+$/g, "");
+                sections.push({ title: header.replace(/^##\s+/, ""), content });
+                if (endIdx === -1) break;
+                remaining = remaining.slice(endIdx);
+            }
+
+            if (sections.length === 0) {
+                sections.push({ title: "Resource Pack", content: text });
+            }
+            return sections;
+        }
+
+        function formatSectionContent(content, sectionKey) {
+            const div = document.createElement("div");
+            div.className = "section-content";
+
+            const lines = content.split(/\n/);
+            let inBlock = false;
+            let blockBuf = [];
+
+            function flushBlock() {
+                if (blockBuf.length) {
+                    const pre = document.createElement("div");
+                    pre.className = "raw-block";
+                    pre.textContent = blockBuf.join("\n");
+                    div.appendChild(pre);
+                    blockBuf = [];
+                }
+                inBlock = false;
+            }
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (/^(Q\d+\.|A\d+\.)/i.test(trimmed) || (trimmed.startsWith("-") && sectionKey === "Parent Guide")) {
+                    flushBlock();
+                    const p = document.createElement("p");
+                    p.textContent = trimmed;
+                    if (/^A\d+\./i.test(trimmed)) p.style.marginLeft = "1rem";
+                    div.appendChild(p);
+                } else if (trimmed) {
+                    blockBuf.push(line);
+                    inBlock = true;
+                } else {
+                    if (inBlock) flushBlock();
+                }
+            }
+            flushBlock();
+            if (!div.querySelector("p") && !div.querySelector(".raw-block")) {
+                div.innerHTML = "";
+                const p = document.createElement("p");
+                p.textContent = content;
+                div.appendChild(p);
+            }
+            return div;
+        }
+
+        function renderPack(data) {
+            const sections = parseSections(data);
+            packSections.innerHTML = "";
+
+            const sectionConfig = [
+                { key: "2-Minute Summary", icon: "schedule", cls: "" },
+                { key: "Level 1: Foundational Questions", icon: "looks_one", cls: "level-1" },
+                { key: "Level 2: Standard Questions", icon: "looks_two", cls: "level-2" },
+                { key: "Level 3: Challenge Questions", icon: "looks_3", cls: "level-3" },
+                { key: "Parent Guide", icon: "family_restroom", cls: "parent-guide" }
+            ];
+
+            for (const sec of sections) {
+                const config = sectionConfig.find(c => sec.title.startsWith(c.key.split(":")[0])) || sectionConfig[0];
+                const sectionEl = document.createElement("div");
+                sectionEl.className = "section " + (config.cls || "");
+
+                const title = sec.title;
+                let badge = "";
+                if (title.includes("Level 1")) badge = '<span class="level-badge">Foundational</span>';
+                if (title.includes("Level 2")) badge = '<span class="level-badge">Standard</span>';
+                if (title.includes("Level 3")) badge = '<span class="level-badge">Challenge</span>';
+
+                sectionEl.innerHTML = `
+                    <h3><span class="material-symbols-outlined">${config.icon}</span>${sec.title} ${badge}</h3>
+                `;
+                sectionEl.appendChild(formatSectionContent(sec.content, sec.title));
+                packSections.appendChild(sectionEl);
+            }
+
+            outputEl.classList.add("visible");
+        }
+
+        async function generatePack() {
+            const topic = topicInput.value.trim();
+            if (!topic) {
+                showError("Please enter a lesson topic.");
+                return;
+            }
+
+            setLoading(true);
+
+            const userContent = PROMPT + topic;
+            const requestBody = {
+                contents: [{ role: "user", parts: [{ text: userContent }] }],
+                generationConfig: {
+                    temperature: 0.6,
+                    maxOutputTokens: 4096,
+                    topP: 0.95
+                }
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestBody)
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error?.message || "API request failed");
+                }
+
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) throw new Error("No content in response");
+
+                renderPack(text);
+            } catch (err) {
+                showError("Error: " + (err.message || "Could not generate Resource Pack. Check your API key and connection."));
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function doPrint() {
+            window.print();
+        }
+
+        function doCopy() {
+            const sections = packSections.querySelectorAll(".section");
+            const parts = [];
+            sections.forEach(s => {
+                const title = s.querySelector("h3");
+                const content = s.querySelector(".section-content");
+                if (title) parts.push(title.textContent.replace(/\s+/g, " ").trim());
+                if (content) parts.push(content.innerText.trim());
+            });
+            const text = parts.join("\n\n");
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1.1rem">check</span> Copied';
+                setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
+            });
+        }
+
+        generateBtn.addEventListener("click", generatePack);
+        topicInput.addEventListener("keydown", (e) => { if (e.key === "Enter") generatePack(); });
+        printBtn.addEventListener("click", doPrint);
+        copyBtn.addEventListener("click", doCopy);
+    </script>
+</body>
+</html>

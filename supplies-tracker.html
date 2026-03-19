@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School-to-Home Supplies Tracker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "DM Sans", sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 50%, #f5f0eb 100%); min-height: 100vh; color: #2d3748; }
+        .container { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem; }
+        header { text-align: center; margin-bottom: 1.75rem; }
+        header h1 { font-family: "Fraunces", serif; font-size: 1.65rem; color: #1a365d; margin-bottom: 0.35rem; }
+        header p { font-size: 0.9rem; color: #5a6c7d; }
+        a.back-link { display: inline-flex; align-items: center; gap: 0.35rem; color: #2b6cb0; text-decoration: none; font-size: 0.9rem; margin-bottom: 1rem; }
+        a.back-link:hover { text-decoration: underline; }
+        .card { background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.05); }
+        .card h2 { font-size: 1rem; font-weight: 600; color: #2d3748; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+        .card h2 .material-symbols-outlined { font-size: 1.1rem; color: #2b6cb0; }
+        label { display: block; font-weight: 500; font-size: 0.85rem; color: #4a5568; margin-bottom: 0.35rem; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 0.95rem; font-family: inherit; margin-bottom: 0.75rem; }
+        input:focus, select:focus { outline: none; border-color: #3182ce; }
+        button.primary { display: inline-flex; align-items: center; gap: 0.4rem; padding: 10px 18px; background: #2b6cb0; color: #fff; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+        button.primary:hover { background: #2c5282; }
+        button.secondary { padding: 8px 14px; background: #e2e8f0; color: #4a5568; border: none; border-radius: 8px; font-size: 0.85rem; cursor: pointer; }
+        button.secondary:hover { background: #cbd5e0; }
+        .kit-list { list-style: none; }
+        .kit-list li { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #e2e8f0; gap: 0.5rem; }
+        .kit-list li:last-child { border-bottom: none; }
+        .kit-list .name { font-weight: 500; }
+        .kit-list .qty { color: #718096; font-size: 0.9rem; }
+        .donation-grid { display: grid; gap: 0.75rem; }
+        .donation-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: #f7fafc; border-radius: 10px; border: 1px solid #e2e8f0; }
+        .donation-item .desc { font-weight: 500; color: #2d3748; }
+        .donation-item .meta { font-size: 0.85rem; color: #718096; margin-top: 0.2rem; }
+        .donation-item button { padding: 6px 12px; background: #38a169; color: #fff; border: none; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .donation-item button:hover { background: #2f855a; }
+        .donation-item button.taken { background: #a0aec0; cursor: default; }
+        .empty { text-align: center; padding: 1.5rem; color: #718096; font-size: 0.9rem; }
+        .unit-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; background: #bee3f8; color: #2b6cb0; margin-left: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="index.html"><span class="material-symbols-outlined" style="font-size:1.1rem">arrow_back</span> All tools</a>
+        <header>
+            <h1>School-to-Home Supplies Tracker</h1>
+            <p>Get kit lists at the start of each unit. Plan ahead and share or swap materials.</p>
+        </header>
+
+        <div class="card">
+            <h2><span class="material-symbols-outlined">list_alt</span> Kit list for this unit</h2>
+            <p style="font-size:0.9rem;color:#5a6c7d;margin-bottom:0.75rem">Add items so parents can buy in bulk or ahead of time.</p>
+            <label>Unit / topic name</label>
+            <input type="text" id="unit-name" placeholder="e.g. Grade 7 Science – Plant Project" />
+            <label>Item name</label>
+            <input type="text" id="item-name" placeholder="e.g. Poster board, markers" />
+            <label>Quantity (per student)</label>
+            <input type="text" id="item-qty" placeholder="e.g. 1, 2 packs" />
+            <button type="button" class="primary" id="add-item">
+                <span class="material-symbols-outlined" style="font-size:1.1rem">add</span> Add to kit list
+            </button>
+            <div id="current-unit" style="margin-top:1rem;font-weight:600;color:#1a365d;"></div>
+            <ul id="kit-list" class="kit-list" style="margin-top:0.5rem;"></ul>
+            <div id="kit-empty" class="empty" style="display:none;">No items yet. Add items above to build the kit list.</div>
+        </div>
+
+        <div class="card">
+            <h2><span class="material-symbols-outlined">share</span> Donation / swap board</h2>
+            <p style="font-size:0.9rem;color:#5a6c7d;margin-bottom:0.75rem">Parents can offer leftover materials (e.g. calculators, art supplies) for others to take.</p>
+            <label>What are you offering?</label>
+            <input type="text" id="donate-name" placeholder="e.g. Scientific calculator, set of colored pencils" />
+            <label>Short note (optional)</label>
+            <input type="text" id="donate-note" placeholder="e.g. Gently used, pick up only" />
+            <button type="button" class="primary" id="add-donation">
+                <span class="material-symbols-outlined" style="font-size:1.1rem">volunteer_activism</span> Post offer
+            </button>
+            <div id="donation-list" class="donation-grid" style="margin-top:1rem;"></div>
+            <div id="donation-empty" class="empty" style="display:none;">No offers yet. Post an item above to start the swap board.</div>
+        </div>
+    </div>
+    <script>
+        const KIT_KEY = "suppliesKit";
+        const DONATE_KEY = "suppliesDonate";
+
+        function getKit() {
+            try { return JSON.parse(localStorage.getItem(KIT_KEY) || "{}"); } catch (e) { return {}; }
+        }
+        function getDonations() {
+            try { return JSON.parse(localStorage.getItem(DONATE_KEY) || "[]"); } catch (e) { return []; }
+        }
+
+        let kit = getKit();
+        let donations = getDonations();
+
+        const defaultDonations = [
+            { id: 1, name: "Scientific calculator", note: "Gently used", taken: false },
+            { id: 2, name: "Set of 24 colored pencils", note: "New, unopened", taken: false }
+        ];
+        if (donations.length === 0) {
+            donations = defaultDonations.slice();
+            localStorage.setItem(DONATE_KEY, JSON.stringify(donations));
+        }
+
+        function saveKit() { localStorage.setItem(KIT_KEY, JSON.stringify(kit)); }
+        function saveDonations() { localStorage.setItem(DONATE_KEY, JSON.stringify(donations)); }
+
+        function renderKit() {
+            const unitName = document.getElementById("unit-name").value.trim();
+            const unitEl = document.getElementById("current-unit");
+            const listEl = document.getElementById("kit-list");
+            const emptyEl = document.getElementById("kit-empty");
+
+            const name = kit.unitName || unitName || "Current unit";
+            const items = kit.items || [];
+
+            if (items.length === 0) {
+                unitEl.textContent = name ? "Unit: " + name : "";
+                unitEl.style.display = name ? "block" : "none";
+                listEl.innerHTML = "";
+                emptyEl.style.display = "block";
+                return;
+            }
+            unitEl.textContent = "Unit: " + name;
+            unitEl.style.display = "block";
+            emptyEl.style.display = "none";
+            listEl.innerHTML = items.map((it, i) => `
+                <li>
+                    <span class="name">${escapeHtml(it.name)}</span>
+                    <span class="qty">${escapeHtml(it.qty || "—")}</span>
+                    <button type="button" class="secondary" data-i="${i}">Remove</button>
+                </li>
+            `).join("");
+            listEl.querySelectorAll("button").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    kit.items.splice(parseInt(btn.dataset.i, 10), 1);
+                    saveKit();
+                    renderKit();
+                });
+            });
+        }
+
+        function addItem() {
+            const unitName = document.getElementById("unit-name").value.trim();
+            const name = document.getElementById("item-name").value.trim();
+            const qty = document.getElementById("item-qty").value.trim();
+            if (!name) return;
+            if (!kit.items) kit.items = [];
+            kit.unitName = unitName || kit.unitName || "Current unit";
+            kit.items.push({ name, qty: qty || "1" });
+            saveKit();
+            document.getElementById("item-name").value = "";
+            document.getElementById("item-qty").value = "";
+            renderKit();
+        }
+
+        function renderDonations() {
+            const listEl = document.getElementById("donation-list");
+            const emptyEl = document.getElementById("donation-empty");
+            const active = donations.filter(d => !d.taken);
+            if (active.length === 0) {
+                listEl.innerHTML = "";
+                emptyEl.style.display = "block";
+                emptyEl.textContent = "No active offers. Post an item above to start the swap board.";
+                return;
+            }
+            emptyEl.style.display = "none";
+            listEl.innerHTML = active.map(d => `
+                <div class="donation-item">
+                    <div>
+                        <div class="desc">${escapeHtml(d.name)}</div>
+                        <div class="meta">${escapeHtml(d.note || "No note")}</div>
+                    </div>
+                    <button type="button" data-id="${d.id}" ${d.taken ? 'class="taken" disabled' : ""}>${d.taken ? "Taken" : "I'll take it"}</button>
+                </div>
+            `).join("");
+            listEl.querySelectorAll("button:not(.taken)").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const d = donations.find(x => x.id === parseInt(btn.dataset.id, 10));
+                    if (d) { d.taken = true; saveDonations(); renderDonations(); }
+                });
+            });
+        }
+
+        function addDonation() {
+            const name = document.getElementById("donate-name").value.trim();
+            const note = document.getElementById("donate-note").value.trim();
+            if (!name) return;
+            const id = Math.max(0, ...donations.map(d => d.id)) + 1;
+            donations.push({ id, name, note, taken: false });
+            saveDonations();
+            document.getElementById("donate-name").value = "";
+            document.getElementById("donate-note").value = "";
+            renderDonations();
+        }
+
+        function escapeHtml(s) {
+            const div = document.createElement("div");
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        document.getElementById("unit-name").value = kit.unitName || "";
+        document.getElementById("add-item").addEventListener("click", addItem);
+        document.getElementById("add-donation").addEventListener("click", addDonation);
+
+        renderKit();
+        renderDonations();
+    </script>
+</body>
+</html>
